@@ -1,0 +1,25 @@
+{
+  "name": "e6_in_c41",
+  "shadow_shift": [
+    -0.06,
+    0.0,
+    0.08
+  ],
+  "midtone_shift": [
+    0.1,
+    0.02,
+    -0.05
+  ],
+  "highlight_shift": [
+    0.08,
+    0.04,
+    -0.06
+  ],
+  "contrast": 2.2,
+  "pivot": 0.5,
+  "saturation": 0.78,
+  "grain_amount": 0.02,
+  "grain_size": 1.2,
+  "grain_shadow_bias": 0.2,
+  "fade": 0.7
+}

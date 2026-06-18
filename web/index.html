@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>cross_processing · shader viewer</title>
+<style>
+  :root { --bg:#141414; --panel:#1f1f1f; --ink:#f0f0e0; --accent:#ff00cc; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  header { padding:14px 18px; border-bottom:1px solid #2a2a2a; }
+  header h1 { margin:0; font-size:16px; letter-spacing:.5px; }
+  header span { color:#8a8a8a; }
+  .wrap { display:flex; gap:18px; padding:18px; flex-wrap:wrap; }
+  .stage { flex:1 1 420px; min-width:320px; }
+  canvas { width:100%; background:#000; border:1px solid #2a2a2a; border-radius:6px; }
+  .panel { flex:0 0 300px; background:var(--panel); border:1px solid #2a2a2a;
+           border-radius:6px; padding:14px; }
+  label { display:block; margin:10px 0 4px; color:#bdbdbd; font-size:12px; }
+  select, input[type=file], button { width:100%; padding:7px; background:#2a2a2a;
+           color:var(--ink); border:1px solid #3a3a3a; border-radius:4px; }
+  .uniform { margin-bottom:8px; }
+  .uniform .row { display:flex; justify-content:space-between; font-size:12px; color:#9a9a9a; }
+  input[type=range] { width:100%; accent-color:var(--accent); }
+  button { margin-top:12px; cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  .hint { color:#777; font-size:11px; margin-top:14px; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>cross_processing <span>· wrong chemistry, on purpose</span></h1>
+</header>
+<div class="wrap">
+  <div class="stage">
+    <canvas id="gl" width="900" height="600"></canvas>
+  </div>
+  <div class="panel">
+    <label for="shader">Shader</label>
+    <select id="shader"></select>
+
+    <label for="image">Image (drop/select; a synthetic image loads by default)</label>
+    <input type="file" id="image" accept="image/*" />
+
+    <div id="uniforms"></div>
+
+    <button id="save">Save PNG</button>
+    <p class="hint">
+      Shaders live in <code>../shaders/</code>. Serve this folder over HTTP
+      (e.g. <code>python -m http.server</code> from the repo root, then open
+      <code>/web/</code>) so the shader files can be fetched.
+    </p>
+  </div>
+</div>
+<script src="viewer.js"></script>
+</body>
+</html>

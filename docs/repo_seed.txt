@@ -1,0 +1,147 @@
+# cross_processing
+
+A repository exploring the deliberate misuse of photographic chemistry — cross-processing (X-pro), the practice of developing film in the wrong chemicals to create unpredictable color shifts, high contrast, and surreal tones. This is about breaking the rules of color reproduction and finding beauty in the chemical accident. The goal is not to "correct" color but to *distort* it with intent.
+
+## The Aesthetic
+
+- **C-41 film in E-6 chemistry**: Color negative film developed in slide chemistry. Creates high contrast, extreme color shifts (magenta skies, green skin tones), heavy grain, and a surreal, almost infrared look.
+- **E-6 film in C-41 chemistry**: Slide film developed in negative chemistry. Creates muted, pastel colors, low contrast, and a "faded" look. The colors are desaturated but shifted — yellows become peach, blues become cyan.
+- **Black-and-white film in C-41**: B&W film (like Ilford XP2) developed in color chemistry. Creates a monochrome image with a subtle color tint (often warm) and the grain structure of C-41 processing.
+- **Push-processed cross-processing**: Developing the film longer than recommended (push) in the wrong chemistry. Exaggerates the color shifts, increases contrast, and makes the grain more prominent. The result is extreme and aggressive.
+- **Expired film cross-processing**: Old film that has lost sensitivity, cross-processed for maximum unpredictability. The colors are wild, the contrast is uneven, and the grain is chaotic. Every roll is a unique experiment.
+- **Tungsten film in daylight (no filter)**: Not technically cross-processing but a similar color shift. Tungsten-balanced film (3200K) shot in daylight (5500K) creates a strong blue cast. The shadows are deep blue, the highlights are warm — a split-tone effect.
+- **Daylight film under tungsten light**: The opposite — a strong orange cast. The image is bathed in warm tones, like a 1970s photograph. The shadows are brown, the highlights are gold.
+- **Cross-processing as a digital look**: Simulating cross-processed film in digital post-processing. The challenge is to create the *organic* color shifts of chemistry, not just a digital color grade. The grain, the contrast, and the color interaction are all part of the look.
+- **Selective cross-processing**: Cross-processing only part of the image, or using cross-processed film as a reference for digital color grading. The cross-processed look is a tool, not a filter.
+
+## Core Concepts
+
+- **C-41 chemistry**: The standard process for color negative film. Developer (CD-4), bleach, fix, stabilizer. The developer reduces silver halide and forms dye clouds (cyan, magenta, yellow). The bleach removes the silver, leaving only the dyes.
+- **E-6 chemistry**: The standard process for color slide (reversal) film. First developer (black-and-white), reversal bath, color developer, bleach, fix. The first developer creates a negative silver image. The reversal bath fogs the unexposed silver. The color developer develops the fogged silver and creates dye clouds.
+- **What happens when you cross-process**: When C-41 film is developed in E-6, the first developer (B&W) creates a silver negative. But the film is designed for color development (CD-4), so the color developer (E-6's second developer) is the wrong chemistry. The dye clouds form incorrectly, the layers are shifted, and the colors are wildly off.
+- **Color layer misalignment**: Color film has three layers (red-sensitive, green-sensitive, blue-sensitive), each with a different dye (cyan, magenta, yellow). Cross-processing causes the dyes to form in the wrong amounts and wrong layers. The result is a color shift that is not just a uniform tint but a complex, non-linear transformation.
+- **Contrast curve distortion**: Cross-processing changes the characteristic curve (H-D curve) of the film. The toe and shoulder are compressed or stretched differently for each color layer. This creates the "cross-processed contrast" — deep shadows and blown highlights with a color shift.
+- **Grain structure**: The grain in cross-processed film is different from normal processing. The wrong chemistry causes the silver halide crystals to develop differently, creating a grain that is larger, more clumped, and differently colored in each layer.
+- **Digital simulation**: Digital cross-processing simulation uses 3D LUTs (Look-Up Tables) that map input colors to output colors. The LUT is created by analyzing real cross-processed film scans. The challenge is that real cross-processing is non-linear and varies with exposure, so a single LUT is never enough. The best simulations use multiple LUTs and blend them based on the input tone.
+- **Split-toning**: A related technique where shadows and highlights are tinted differently. Cross-processing often creates a natural split-tone — the shadows are one color (e.g., cyan) and the highlights are another (e.g., orange). This is because the different color layers have different toe/shoulder responses in the wrong chemistry.
+
+## Repository Structure
+
+```
+├── shaders/
+│   ├── c41_in_e6.frag                    # C-41 film in E-6 chemistry (high contrast, magenta/green shift)
+│   ├── e6_in_c41.frag                    # E-6 film in C-41 chemistry (muted, pastel, low contrast)
+│   ├── bw_in_c41.frag                    # B&W film in C-41 (monochrome with warm tint)
+│   ├── push_processed_xpro.frag            # Pushed cross-processing (extreme shifts)
+│   ├── expired_film_xpro.frag              # Expired film + cross-processing (chaotic)
+│   ├── tungsten_daylight.frag              # Tungsten film in daylight (blue shift)
+│   ├── daylight_tungsten.frag              # Daylight film in tungsten (orange shift)
+│   ├── selective_cross_process.frag        # Cross-process only part of the image
+│   ├── digital_xpro_lut.frag               # Digital LUT-based cross-processing simulation
+│   └── split_tone_xpro.frag                # Shadow/highlight split-tone from cross-processing
+├── notebooks/
+│   ├── cross_process_simulator.ipynb       # Simulate cross-processing chemistry in Python
+│   ├── xpro_lut_generator.ipynb            # Generate 3D LUTs from real cross-processed scans
+│   ├── color_shift_analyzer.ipynb          # Analyze color shifts from cross-processed images
+│   └── contrast_curve_xpro.ipynb           # Plot contrast curves for cross-processed film
+├── tools/
+│   ├── xpro_lut_applier.py                 # Apply cross-processing LUTs to images
+│   ├── xpro_batch_processor.py             # Batch process images with cross-processing
+│   ├── xpro_profile_extractor.py           # Extract cross-processing profile from film scans
+│   └── split_tone_generator.py             # Generate split-tone effects from cross-processing data
+├── references/
+│   ├── c41_chemistry.md                    # C-41 process chemistry and reactions
+│   ├── e6_chemistry.md                     # E-6 process chemistry and reactions
+│   ├── cross_process_history.md            # History of cross-processing in photography
+│   └── color_film_layers.md                # Structure of color film emulsion layers
+├── gallery/
+│   └── (output renders)
+└── README.md
+```
+
+## File Contents
+
+### shaders/c41_in_e6.frag
+The classic cross-processing look: C-41 color negative film developed in E-6 slide chemistry. The result is high contrast, extreme color shifts (magenta skies, green skin tones, yellow shadows), and heavy grain. The shader applies a non-linear color transform that shifts the midtones toward magenta, the shadows toward green, and the highlights toward yellow. The contrast is increased with an S-curve. Uniforms: `u_shift_intensity`, `u_contrast_boost`, `u_grain_amount`, `u_saturation`.
+
+### shaders/e6_in_c41.frag
+The opposite cross-processing: E-6 slide film developed in C-41 negative chemistry. The result is muted, pastel colors, low contrast, and a "faded" look. The shader desaturates the image, flattens the contrast curve, and shifts the colors toward peach (warm) and cyan (cool). The result is a "dreamy" or "nostalgic" look. Uniforms: `u_fade_amount`, `u_pastel_shift`, `u_contrast_reduction`, `u_warmth`.
+
+### shaders/bw_in_c41.frag
+Black-and-white film developed in C-41 color chemistry. The result is a monochrome image with a subtle color tint (often warm, from the C-41 developer). The shader converts the image to grayscale and then applies a warm tint (orange-yellow) with a slight color shift in the highlights. The grain is the C-41 grain structure, which is different from B&W grain. Uniforms: `u_tint_color`, `u_tint_intensity`, `u_grain_size`.
+
+### shaders/push_processed_xpro.frag
+Cross-processing with push development (longer development time). The result is extreme — the color shifts are amplified, the contrast is pushed to the limit, and the grain is huge. The shader applies an aggressive S-curve, extreme color shifts, and a grain texture that is large and clumpy. The highlights are blown, the shadows are crushed. This is the "punk rock" cross-processing look. Uniforms: `u_push_stops`, `u_aggression`, `u_highlight_clip`, `u_shadow_crush`.
+
+### shaders/expired_film_xpro.frag
+Expired film that has lost sensitivity, cross-processed for maximum chaos. The colors are wild and unpredictable, the contrast is uneven, and the grain is chaotic. The shader uses a noise-driven color shift that varies across the frame. Some areas are heavily shifted, others are barely affected. The grain is random in size and color. The result is a "disaster" that is beautiful. Uniforms: `u_chaos_level`, `u_color_randomness`, `u_grain_chaos`, `u_time`.
+
+### shaders/tungsten_daylight.frag
+Tungsten-balanced film (3200K) shot in daylight (5500K) without a filter. The result is a strong blue cast. The shader shifts the white balance toward blue, but not uniformly — the shadows are deeper blue, the highlights are less affected (they are closer to white). The result is a "cold" look with warm highlights, like a winter scene. Uniforms: `u_blue_shift`, `u_shadow_cool`, `u_highlight_warm`.
+
+### shaders/daylight_tungsten.frag
+Daylight-balanced film (5500K) shot under tungsten light (3200K). The result is a strong orange cast. The shader shifts the white balance toward orange, with the shadows being deeper orange and the highlights less affected. The result is a "warm" look that feels like a 1970s photograph or a candlelit scene. Uniforms: `u_orange_shift`, `u_shadow_warm`, `u_highlight_neutral`.
+
+### shaders/selective_cross_process.frag
+Cross-processing only part of the image. The shader uses a mask (gradient, texture, or user-defined) to apply the cross-processing effect only to certain areas. The rest of the image remains normal. This creates a "cross-processed world" effect where only the subject or the background is shifted. Uniforms: `u_mask_texture`, `u_process_intensity`, `u_mask_blur`.
+
+### shaders/digital_xpro_lut.frag
+A digital LUT-based cross-processing simulation. The shader uses a 3D texture (LUT) that maps input RGB to output RGB. The LUT is designed to match the non-linear color shifts of real cross-processing. The shader supports blending between multiple LUTs based on the input tone (shadow LUT, midtone LUT, highlight LUT). This is the most accurate digital simulation.
+
+### shaders/split_tone_xpro.frag
+A split-tone effect derived from cross-processing. The shader separates the image into shadows and highlights using a threshold or a smooth transition. The shadows are tinted one color (e.g., cyan), the highlights are tinted another (e.g., orange). The split is not just a color overlay — it is based on the cross-processing color shift behavior where shadows and highlights respond differently to the wrong chemistry. Uniforms: `u_shadow_color`, `u_highlight_color`, `u_split_smoothness`, `u_balance`.
+
+### notebooks/cross_process_simulator.ipynb
+Simulates the cross-processing chemistry in Python. The user inputs a film type (C-41 or E-6), a process type (C-41 or E-6), and a push/pull amount. The notebook calculates the resulting color shifts, contrast changes, and grain structure based on a simplified chemical model. The output is a preview image and a set of parameters for the shader.
+
+### notebooks/xpro_lut_generator.ipynb
+Generates 3D LUTs from real cross-processed film scans. The user uploads a normal image and a cross-processed version of the same image. The notebook calculates the color mapping and generates a 3D LUT (e.g., a 64×64×64 RGB cube) that can be used in the shader or in Photoshop/Lightroom. The LUT captures the non-linear color shifts of the real process.
+
+### notebooks/color_shift_analyzer.ipynb
+Analyzes the color shifts from cross-processed images. The user uploads a cross-processed image. The notebook measures the color shift in different tone regions (shadows, midtones, highlights) and outputs a color shift profile. The profile can be used to create a digital simulation or to understand the chemical process.
+
+### notebooks/contrast_curve_xpro.ipynb
+Plots the contrast curves (H-D curves) for cross-processed film. The user inputs a film type and a cross-processing method. The notebook plots the density vs. log exposure for each color layer (R, G, B). The curves show how the toe, straight line, and shoulder are affected by the wrong chemistry. The notebook explains why cross-processing creates the characteristic "cross-processed contrast."
+
+### tools/xpro_lut_applier.py
+Applies cross-processing LUTs to images. The tool supports 3D LUTs in various formats (CUBE, 3DL, PNG). The user can choose a LUT and apply it to an image or video. The tool also supports blending between LUTs and adjusting the intensity. The tool can batch process multiple images.
+
+### tools/xpro_batch_processor.py
+Batch processes images with cross-processing. The tool can apply a consistent cross-processing look to a folder of images or a video. It supports multiple cross-processing presets (C-41 in E-6, E-6 in C-41, push, expired, etc.) and can vary the parameters slightly for each image to create a "batch of unique cross-processed images" look.
+
+### tools/xpro_profile_extractor.py
+Extracts a cross-processing profile from a scanned film image. The tool analyzes the image and outputs a set of parameters: color shift (per channel), contrast curve, saturation change, and grain characteristics. The profile can be used to match the digital simulation to the real film scan.
+
+### tools/split_tone_generator.py
+Generates split-tone effects from cross-processing data. The tool uses the color shift data from the cross-processing profile to create a split-tone effect where shadows and highlights are tinted differently. The tool supports smooth transitions and can export the split-tone as a LUT or a set of curves for Photoshop/Lightroom.
+
+## Design Prompts
+
+- **"Create a cross-processing shader that simulates C-41 film developed in E-6 with a 2-stop push. The result should be extreme — magenta skies, green skin, yellow shadows, blown highlights, crushed blacks. The grain should be large and clumpy. The image should feel like a 1990s fashion editorial shot by a reckless photographer."**
+- **"Design a faded cross-processing shader that simulates E-6 slide film developed in C-41 with a 1-stop pull. The result should be muted, pastel, low contrast, with a warm peach shift in the midtones and a cool cyan in the shadows. The image should feel like a faded postcard from a dream."**
+- **"Build a split-tone shader that mimics the natural split-tone of cross-processing. The shadows should be a deep cyan (from the blue-sensitive layer overdeveloping), and the highlights should be a warm orange (from the red-sensitive layer underdeveloping). The transition should be smooth, not a hard cut. Add a subtle grain texture that is different in the shadows and highlights."**
+
+## References
+- "Cross Processing" by the Lomography community (Lomo LC-A, cross-processing bible)
+- Kodak Ektachrome E100 (E-6 slide film, classic for cross-processing)
+- Fujifilm Provia, Velvia (E-6 slide films, popular for cross-processing)
+- Kodak Portra, Fujifilm Pro 400H (C-41 negative films, popular for cross-processing)
+- "The Film Developing Cookbook" by Bill Troop and Stephen G. Anchell (cross-processing chemistry)
+- Instagram/VSCO cross-processing filters (and how they fail to capture the real chemistry)
+- Fashion photography 1990s (cross-processing as a standard look)
+- "Cross Processing: A Guide to the Unexpected" by various film photographers
+- C-41 and E-6 process specifications (Kodak, Fujifilm technical documents)
+
+## Color Palette
+- **C-41 in E-6 magenta**: #FF00CC (the magenta shift of the sky)
+- **C-41 in E-6 green**: #00CC66 (the green shift of skin tones)
+- **C-41 in E-6 yellow**: #FFCC00 (the yellow shift of shadows)
+- **E-6 in C-41 peach**: #FFCCAA (the pastel peach of E-6 in C-41)
+- **E-6 in C-41 cyan**: #AACCFF (the cool cyan of E-6 in C-41)
+- **Tungsten daylight blue**: #3366FF (the blue shift of tungsten film in daylight)
+- **Daylight tungsten orange**: #FF8800 (the orange shift of daylight film in tungsten)
+- **Cross-process black**: #1A1A1A (the deep, color-shifted black of cross-processing)
+- **Cross-process white**: #F0F0E0 (the warm, blown white of cross-processing)
+
+## Mood
+The chemistry is wrong. The colors are lying. The image is a chemical poem written in a language the film never learned. The magenta is not a sky, the green is not a face, the yellow is not a shadow. They are all confessions — the film's confession that it was developed in the wrong darkroom, by the wrong hands, in the wrong chemicals. The mistake is the masterpiece.

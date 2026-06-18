@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Testing caches
+.pytest_cache/
+.coverage
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Generated artifacts (keep the curated gallery, ignore scratch output)
+*.cube
+*.3dl
+/out/
+/output/
+scratch/
+*_lut.png
+
+# But DO track the curated gallery renders and presets.
+!gallery/*.png
+!presets/*.json
