@@ -79,6 +79,7 @@ def add_grain(rgb: np.ndarray, amount: float, size: float = 1.0,
     rng = np.random.default_rng(seed)
     h, w = rgb.shape[:2]
     size = max(size, 0.5)  # clamp to avoid div-by-zero / OOM on huge arrays
+    size = max(size, 0.5)
     gh, gw = max(1, int(h / size)), max(1, int(w / size))
     noise = rng.standard_normal((gh, gw, 1)).astype(np.float32)
     if (gh, gw) != (h, w):  # nearest-neighbour upscale -> chunky grain
