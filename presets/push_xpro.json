@@ -1,0 +1,25 @@
+{
+  "name": "push_xpro",
+  "shadow_shift": [
+    -0.05,
+    0.16,
+    -0.04
+  ],
+  "midtone_shift": [
+    0.18,
+    -0.08,
+    0.16
+  ],
+  "highlight_shift": [
+    0.22,
+    0.12,
+    -0.16
+  ],
+  "contrast": 11.0,
+  "pivot": 0.42,
+  "saturation": 1.5,
+  "grain_amount": 0.1,
+  "grain_size": 2.5,
+  "grain_shadow_bias": 1.0,
+  "fade": 0.0
+}

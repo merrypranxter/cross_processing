@@ -1,0 +1,10 @@
+# Runtime dependencies for the Python tools and notebooks.
+numpy>=1.23
+Pillow>=9.0
+
+# Notebooks / plotting (optional for the CLI tools).
+matplotlib>=3.5
+jupyter>=1.0
+
+# Testing.
+pytest>=7.0

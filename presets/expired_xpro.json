@@ -1,0 +1,25 @@
+{
+  "name": "expired_xpro",
+  "shadow_shift": [
+    0.08,
+    -0.06,
+    0.1
+  ],
+  "midtone_shift": [
+    -0.05,
+    0.1,
+    -0.08
+  ],
+  "highlight_shift": [
+    0.12,
+    0.06,
+    0.04
+  ],
+  "contrast": 5.0,
+  "pivot": 0.5,
+  "saturation": 1.1,
+  "grain_amount": 0.12,
+  "grain_size": 3.0,
+  "grain_shadow_bias": 0.5,
+  "fade": 0.4
+}

@@ -1,0 +1,25 @@
+{
+  "name": "bw_in_c41",
+  "shadow_shift": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "midtone_shift": [
+    0.04,
+    0.0,
+    -0.04
+  ],
+  "highlight_shift": [
+    0.06,
+    0.02,
+    -0.05
+  ],
+  "contrast": 4.0,
+  "pivot": 0.5,
+  "saturation": 0.0,
+  "grain_amount": 0.04,
+  "grain_size": 1.5,
+  "grain_shadow_bias": 0.4,
+  "fade": 0.0
+}
