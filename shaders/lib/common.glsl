@@ -44,7 +44,7 @@ float grain(vec2 uv, vec2 resolution, float size, float seed) {
 // point the curve rotates around (0.5 = neutral, lower = darker midtones).
 float sCurve(float x, float contrast, float pivot) {
     // Logistic-style curve normalized to pass through (pivot, pivot).
-    float k = contrast;
+    float k = max(0.01, contrast); // avoid div-by-zero (hi-lo -> 0) -> NaN
     float a = 1.0 / (1.0 + exp(-k * (x - pivot)));
     float lo = 1.0 / (1.0 + exp(-k * (0.0 - pivot)));
     float hi = 1.0 / (1.0 + exp(-k * (1.0 - pivot)));

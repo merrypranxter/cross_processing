@@ -57,7 +57,7 @@ def main(argv=None):
         sys.exit(f"Not a directory: {indir}")
     outdir.mkdir(parents=True, exist_ok=True)
 
-    files = sorted(p for p in indir.iterdir() if p.suffix.lower() in EXTS)
+    files = sorted(p for p in indir.iterdir() if p.is_file() and p.suffix.lower() in EXTS)
     if not files:
         sys.exit(f"No images found in {indir}")
 

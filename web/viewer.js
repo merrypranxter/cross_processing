@@ -151,6 +151,7 @@ function syntheticImage() {
 }
 
 function setImage(source, w, h) {
+  if (imageTex) gl.deleteTexture(imageTex);  // free the previous GPU texture
   imageTex = makeTexture(source);
   imageSize = [w, h];
   const canvas = gl.canvas;
@@ -258,7 +259,10 @@ document.getElementById("image").onchange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
   const img = new Image();
-  img.onload = () => setImage(img, img.width, img.height);
+  img.onload = () => {
+    setImage(img, img.width, img.height);
+    URL.revokeObjectURL(img.src);  // free the blob URL once decoded
+  };
   img.src = URL.createObjectURL(file);
 };
 

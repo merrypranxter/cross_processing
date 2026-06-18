@@ -18,9 +18,10 @@ from typing import Dict, Tuple
 import numpy as np
 
 try:  # Pillow is only needed for image I/O, not for the maths.
-    from PIL import Image
+    from PIL import Image, ImageOps
 except ImportError:  # pragma: no cover
     Image = None
+    ImageOps = None
 
 
 REC709 = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
@@ -32,7 +33,8 @@ REC709 = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
 def load_image(path: str | Path) -> np.ndarray:
     if Image is None:
         raise RuntimeError("Pillow is required for image I/O. pip install Pillow")
-    img = Image.open(path).convert("RGB")
+    img = Image.open(path)
+    img = ImageOps.exif_transpose(img).convert("RGB")  # respect EXIF orientation
     return np.asarray(img, dtype=np.float32) / 255.0
 
 
@@ -57,7 +59,7 @@ def smoothstep(edge0: float, edge1: float, x: np.ndarray) -> np.ndarray:
 
 def s_curve(x: np.ndarray, contrast: float, pivot: float = 0.5) -> np.ndarray:
     """Logistic S-curve normalized to pass through (0,0) and (1,1)."""
-    k = contrast
+    k = max(0.01, contrast)  # avoid div-by-zero (hi-lo -> 0) producing NaNs
     a = 1.0 / (1.0 + np.exp(-k * (x - pivot)))
     lo = 1.0 / (1.0 + np.exp(-k * (0.0 - pivot)))
     hi = 1.0 / (1.0 + np.exp(-k * (1.0 - pivot)))
@@ -76,6 +78,7 @@ def add_grain(rgb: np.ndarray, amount: float, size: float = 1.0,
         return rgb
     rng = np.random.default_rng(seed)
     h, w = rgb.shape[:2]
+    size = max(size, 0.5)  # clamp to avoid div-by-zero / OOM on huge arrays
     gh, gw = max(1, int(h / size)), max(1, int(w / size))
     noise = rng.standard_normal((gh, gw, 1)).astype(np.float32)
     if (gh, gw) != (h, w):  # nearest-neighbour upscale -> chunky grain
@@ -112,11 +115,11 @@ class XproProfile:
     fade: float = 0.0  # 0 = none, lifts blacks toward a faded look
 
     def to_json(self, path: str | Path) -> None:
-        Path(path).write_text(json.dumps(asdict(self), indent=2))
+        Path(path).write_text(json.dumps(asdict(self), indent=2), encoding="utf-8")
 
     @classmethod
     def from_json(cls, path: str | Path) -> "XproProfile":
-        data = json.loads(Path(path).read_text())
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
         return cls(**data)
 
 
@@ -201,7 +204,7 @@ def read_cube(path: str | Path) -> Tuple[np.ndarray, np.ndarray]:
     dmin = np.zeros(3, np.float32)
     dmax = np.ones(3, np.float32)
     rows = []
-    for line in Path(path).read_text().splitlines():
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
@@ -234,7 +237,7 @@ def write_cube(path: str | Path, table: np.ndarray, title: str = "cross_processi
     flat = t.reshape(-1, 3)
     for r, g, b in flat:
         lines.append(f"{r:.6f} {g:.6f} {b:.6f}")
-    Path(path).write_text("\n".join(lines) + "\n")
+    Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def apply_cube(rgb: np.ndarray, table: np.ndarray) -> np.ndarray:
