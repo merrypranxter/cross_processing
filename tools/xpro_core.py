@@ -22,6 +22,7 @@ try:  # Pillow is only needed for image I/O, not for the maths.
 except ImportError:  # pragma: no cover
     Image = None
     ImageOps = None
+    ImageOps = None
 
 
 REC709 = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
